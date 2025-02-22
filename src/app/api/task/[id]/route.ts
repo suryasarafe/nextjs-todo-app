@@ -4,17 +4,14 @@ import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/li
 import { Task } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromCookie();
     checkAuthorized(user)
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "id required" }, { status: 400 });
     }
-    // dipasang biar ga di marahin builder
-    const { data } = await req.json();
-    console.log(data)
 
     const tasks = await prisma.task.findFirst({ where: { id } });
     if (!tasks) {
@@ -29,11 +26,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getUserFromCookie();
     checkAuthorized(user)
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "id required" }, { status: 400 });
     }

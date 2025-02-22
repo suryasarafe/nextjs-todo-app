@@ -14,7 +14,6 @@ export default function AssignTaskContainer({ givenTask }: { givenTask: Tasks | 
   useEffect(() => {
     const token = Cookies.get("token");
     if (givenTask == null) {
-
       fetch("/api/task", {
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
       })
@@ -29,7 +28,7 @@ export default function AssignTaskContainer({ givenTask }: { givenTask: Tasks | 
     })
       .then((res) => res.json())
       .then((data) => setUsers(data.users || []));
-  }, []);
+  }, [givenTask]);
 
   const handleAssign = async () => {
     if (!selectedTask || !selectedUser) return alert("Select both task and user");

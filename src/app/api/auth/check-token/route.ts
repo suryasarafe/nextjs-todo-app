@@ -1,4 +1,4 @@
-import { getUserFromCookie, getUserFromRequest } from "@/lib/auth";
+import { getUserFromRequest } from "@/lib/auth";
 import { checkAuthorized, errorResponseHandler } from "@/lib/util";
 import { NextResponse } from "next/server";
 

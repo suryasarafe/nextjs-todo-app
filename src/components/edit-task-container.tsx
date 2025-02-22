@@ -36,7 +36,7 @@ export default function EditTaskContainer({ givenTask }: { givenTask: Task | nul
         })
 
     }
-  }, [taskId]);
+  }, [taskId, givenTask]);
 
   const handleUpdate = async () => {
     if (!canEdit()) {

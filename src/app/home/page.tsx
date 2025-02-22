@@ -23,7 +23,7 @@ export default async function HomePage() {
       {role == "LEAD" && (
         <div className="flex-1 p-4">
           <div>
-            <AssignTaskContainer />
+            <AssignTaskContainer givenTask={null}/>
           </div>
           <FloatingButton />
         </div>

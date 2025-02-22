@@ -5,7 +5,7 @@ import { User } from "@prisma/client";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-export default function AssignTaskContainer() {
+export default function AssignTaskContainer({ givenTask }: { givenTask: Tasks | null }) {
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedTask, setSelectedTask] = useState("");
@@ -13,11 +13,16 @@ export default function AssignTaskContainer() {
 
   useEffect(() => {
     const token = Cookies.get("token");
-    fetch("/api/task", {
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setTasks(data.tasks || []));
+    if (givenTask == null) {
+
+      fetch("/api/task", {
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => setTasks(data.tasks || []));
+    } else {
+      setTasks([givenTask]);
+    }
 
     fetch("/api/user", {
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
@@ -34,6 +39,7 @@ export default function AssignTaskContainer() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ taskId: selectedTask, assignToId: selectedUser }),
     });
+    
     if (res.ok) {
       alert("Task assigned successfully!");
     } else {

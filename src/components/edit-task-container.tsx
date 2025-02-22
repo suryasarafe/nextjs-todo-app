@@ -5,9 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import { Task, TaskStatus } from "@prisma/client";
 import Cookies from "js-cookie";
 
-export default function EditTaskContainer() {
+export default function EditTaskContainer({ givenTask }: { givenTask: Task | null }) {
   const router = useRouter();
-  const { taskId } = useParams(); // Get task ID from URL
+  const { taskId } = useParams();
 
 
   const [task, setTask] = useState<Partial<Task>>({} as Task);
@@ -22,14 +22,20 @@ export default function EditTaskContainer() {
     setToken(token!);
     setRole(role!);
 
-    fetch(`/api/task/${taskId}`, {
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTask(data.tasks || {});
-        setLoading(false);
+    if (givenTask != null) {
+      setTask(givenTask!);
+      setLoading(false);
+    } else {
+      fetch(`/api/task/${taskId}`, {
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
       })
+        .then((res) => res.json())
+        .then((data) => {
+          setTask(data.tasks || {});
+          setLoading(false);
+        })
+
+    }
   }, [taskId]);
 
   const handleUpdate = async () => {
@@ -62,14 +68,14 @@ export default function EditTaskContainer() {
   }
 
   if (!task) {
-    return <div className="max-w-lg mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Task Not found</h2>
+    return <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-xl font-semibold mb-4">Task Not found</h2>
     </div>
   }
 
   return (
-    <div className="max-w-lg mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Edit Task</h2>
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
 
       <label>Title</label>
       <input

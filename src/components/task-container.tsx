@@ -36,9 +36,9 @@ export default function TaskContainer() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold">Task List</h2>
-      <ul className="mt-4">
+    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-xl font-semibold mb-4">Task List</h2>
+      <ul className="">
         {tasks.map((task) => (
           <Link key={task.id} href={'/home/' + task.id} className="hover:scale-125">
             <li key={task.id} className="p-2 border-b flex justify-center">

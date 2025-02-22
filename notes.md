@@ -12,5 +12,5 @@
 - go to setting -> git -> Ignored Build Step
 - set custom then type:
 ```
-if [ "$VERCEL_GIT_BRANCH" != "main" ]; then   echo "Skipping deploy for branch $VERCEL_GIT_BRANCH";  exit 0; fi
+[ "$VERCEL_GIT_COMMIT_REF" != "main" ] && echo "Skipping deploy for branch $VERCEL_GIT_COMMIT_REF" && exit 0
 ```

@@ -15,7 +15,7 @@ export function getUserFromRequest(req: Request) {
   }
 }
 
-export async function getUserFromCookie() {
+export async function getUserFromCookie(): Promise<{ id: string; role: string } | null> {
   const token = (await (cookies())).get("token")?.value;
   if (!token) return null;
 

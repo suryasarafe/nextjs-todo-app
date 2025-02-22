@@ -27,13 +27,9 @@ export default function EditTaskContainer() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setTask(data.tasks);
+        setTask(data.tasks || {});
         setLoading(false);
       })
-      .catch((err) => {
-        setTask({} as Task);
-        console.error("Error fetching task:", err);
-      });
   }, [taskId]);
 
   const handleUpdate = async () => {

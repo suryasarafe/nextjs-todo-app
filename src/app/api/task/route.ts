@@ -17,10 +17,7 @@ export async function GET() {
     });
     return NextResponse.json({ tasks }, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }
 
@@ -42,10 +39,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ message: "Task created", task: newTask }, { status: 201 });
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }
 

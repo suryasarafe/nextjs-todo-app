@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const user = getUserFromCookie();
-    checkAuthorized(user)
+    const user = await getUserFromCookie();
+    checkAuthorized(user);
 
     const users = await prisma.user.findMany({
       select: {
@@ -17,9 +17,6 @@ export async function GET() {
     });
     return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }

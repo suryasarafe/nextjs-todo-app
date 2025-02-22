@@ -1,3 +1,4 @@
+import { JWTExpired, JWTInvalid } from "jose/errors";
 import { NextResponse } from "next/server";
 
 export function checkAuthorized(user: any): any {
@@ -16,14 +17,22 @@ export function checkAuthorizedLead(user: { id: string; role?: string; } | null)
   return true;
 }
 
-export function errorResponseHandler(error: Error) {
-  switch (error.message) {
-    case "Unauthorized":
-    case "User not lead":
-      return NextResponse.json({ error: error.message }, { status: 401 });
+export function errorResponseHandler(error: any) {
+  if (error instanceof JWTExpired) {
+    return NextResponse.json({ error: error.name }, { status: 401 });
+  } else if (error instanceof JWTInvalid) {
+    return NextResponse.json({ error: error.name }, { status: 401 });
+  } else if (error instanceof Error) {
+    switch (error.message) {
+      case "Unauthorized":
+      case "User not lead":
+        return NextResponse.json({ error: error.message }, { status: 401 });
 
-    default:
-      return NextResponse.json({ error }, { status: 500 });
+      default:
+        return NextResponse.json({ error }, { status: 500 });
 
+    }
   }
+
+  return NextResponse.json({ error }, { status: 500 });
 }

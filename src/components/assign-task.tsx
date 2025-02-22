@@ -17,13 +17,13 @@ export default function AssignTaskContainer() {
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setTasks(data.tasks));
+      .then((data) => setTasks(data.tasks || []));
 
     fetch("/api/user", {
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setUsers(data.users));
+      .then((data) => setUsers(data.users || []));
   }, []);
 
   const handleAssign = async () => {
@@ -32,9 +32,8 @@ export default function AssignTaskContainer() {
     const res = await fetch(`/api/task/assign`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ taskId: selectedTask,  assignToId: selectedUser }),
+      body: JSON.stringify({ taskId: selectedTask, assignToId: selectedUser }),
     });
-
     if (res.ok) {
       alert("Task assigned successfully!");
     } else {

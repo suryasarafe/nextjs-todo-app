@@ -8,6 +8,7 @@
 ```
   DATABASE_URL=postgres://yoururl
   JWT_SECRET=your_secret_key
+  API_URL=http://localhost:3000
 ```
 
 for DATABASE_URL you can create one for free on Vercel, for this project I use Neon Serverless Postgres.
@@ -15,7 +16,8 @@ for DATABASE_URL you can create one for free on Vercel, for this project I use N
 - run `npm install`
 - run `npx prisma generate`
 - run `npm run dev`
-- also for this project I set register API to be protected, you can free it by removing the `/api/auth/register`.**
+
+also for this project I set Register_API** to be protected, you can free it by removing the `/api/auth/register`. from `middleware.ts`
 
 
 

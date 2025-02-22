@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export function checkAuthorized(user: any) {
+export function checkAuthorized(user: any): any {
   if (!user) {
     throw new Error("Unauthorized");
   }
@@ -8,7 +8,7 @@ export function checkAuthorized(user: any) {
   return true;
 }
 
-export function checkAuthorizedLead(user: { id: string; role?: string; } | null) {
+export function checkAuthorizedLead(user: { id: string; role?: string; } | null): any {
   if (!user || user.role !== "LEAD") {
     throw new Error("User not lead");
   }

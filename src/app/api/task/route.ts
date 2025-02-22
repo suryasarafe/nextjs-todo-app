@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { getUserFromCookie } from "@/lib/auth";
 import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/lib/util";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const user = await getUserFromCookie();
     checkAuthorized(user);

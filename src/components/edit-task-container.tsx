@@ -34,7 +34,7 @@ export default function EditTaskContainer() {
         setTask({} as Task);
         console.error("Error fetching task:", err);
       });
-  }, []);
+  }, [taskId]);
 
   const handleUpdate = async () => {
     if (!canEdit()) {

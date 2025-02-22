@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { checkAuthorized, errorResponseHandler } from "@/lib/util";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const user = getUserFromCookie();
     checkAuthorized(user)

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 export async function middleware(req: NextRequest) {
-   const token = (await(cookies())).get("token")?.value;
+  const token = (await (cookies())).get("token")?.value;
   if (!token) return null;
 
   try {
@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
     req.headers.set("user", JSON.stringify(decoded));
     return NextResponse.next();
   } catch (error) {
-    return NextResponse.json({ error: "Invalid token" }, { status: 403 });
+    return NextResponse.json({ error, message: "Invalid token" }, { status: 403 });
   }
 }
 

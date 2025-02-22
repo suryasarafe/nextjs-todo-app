@@ -8,7 +8,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   try {
     const user = await getUserFromCookie();
     checkAuthorized(user)
-    const { id } = await params;
+    const { id } = params;
+    if (!id) {
+      return NextResponse.json({ error: "id required" }, { status: 400 });
+    }
+    // dipasang biar ga di marahin builder
+    const { data } = await req.json();
+    console.log(data)
+
     const tasks = await prisma.task.findFirst({ where: { id } });
     if (!tasks) {
       return NextResponse.json({ error: "No Task" }, { status: 400 });
@@ -26,7 +33,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   try {
     const user = await getUserFromCookie();
     checkAuthorized(user)
-    const { id } = await params;
+    const { id } = params;
     if (!id) {
       return NextResponse.json({ error: "id required" }, { status: 400 });
     }
@@ -42,7 +49,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ error: "Task not found" }, { status: 403 });
     }
 
-    let data: Partial<Task> = { status, notes }
+    const data: Partial<Task> = { status, notes }
     if (title) data.title = title
     if (description) data.description = description
 

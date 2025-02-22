@@ -6,7 +6,9 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 export async function middleware(req: NextRequest) {
   const token = (await (cookies())).get("token")?.value;
-  if (!token) return null;
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const secret = new TextEncoder().encode(SECRET_KEY);

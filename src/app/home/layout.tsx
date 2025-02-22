@@ -6,7 +6,10 @@ interface HomeLayoutProps {
   children: ReactNode;
 }
 export const metadata: Metadata = {
-  title: "Home",
+  title: {
+    default: "",
+    template: "%s | Todo App"
+  },
   description: "Todo App for Manage tasks effortlessly. Assign tasks, track progress tracking your todo, using NextJs and PostgreSQL",
 };
 export default function HomeLayout({ children }: HomeLayoutProps) {

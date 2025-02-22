@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function RegisterContainer() {
   const router = useRouter();
@@ -13,17 +14,8 @@ export default function RegisterContainer() {
 
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const user = localStorage.getItem("user");
-      if (!user) {
-        setError("Unauthorized. Please login.");
-        return;
-      }
-      const parsed = JSON.parse(user);
-      setToken(parsed.token);
-    };
-
-    fetchUser();
+    const token = Cookies.get("token");
+    setToken(token!);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -24,7 +24,8 @@ export default function LoginContainer() {
       return;
     }
     const data = await res.json();
-    localStorage.setItem("user", JSON.stringify({ token: data.token, role: data.role }));
+    document.cookie = `token=${data.token}; path=/; Secure`;
+    document.cookie = `role=${data.role}; path=/; Secure`;
     router.push("/home");
   };
 

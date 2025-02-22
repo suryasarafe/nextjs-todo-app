@@ -21,6 +21,7 @@ model Task {
   id          String   @id @default(uuid())
   title       String
   description String?
+  notes       String?
   status      TaskStatus
 
   assignedTo   User?  @relation(name: "AssignedTasks", fields: [assignedToId], references: [id])

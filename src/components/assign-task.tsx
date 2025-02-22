@@ -29,10 +29,10 @@ export default function AssignTaskContainer() {
   const handleAssign = async () => {
     if (!selectedTask || !selectedUser) return alert("Select both task and user");
 
-    const res = await fetch(`/api/task/${selectedTask}/assign`, {
+    const res = await fetch(`/api/task/assign`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ assignedTo: selectedUser }),
+      body: JSON.stringify({ taskId: selectedTask,  assignToId: selectedUser }),
     });
 
     if (res.ok) {

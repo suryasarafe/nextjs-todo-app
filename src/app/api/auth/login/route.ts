@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import limitHandler from "@/lib/limiter";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 export async function POST(req: Request) {
   try {
+    await limitHandler(req);
     const { username, password } = await req.json();
 
     if (!username || !password) {

@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserFromCookie } from "@/lib/auth";
 import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/lib/util";
+import limitHandler from "@/lib/limiter";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user);
 
@@ -23,6 +25,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorizedLead(user);
 

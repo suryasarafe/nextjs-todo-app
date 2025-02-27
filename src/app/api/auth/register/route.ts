@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
+import limitHandler from "@/lib/limiter";
 
 export async function POST(req: Request) {
   try {
+    await limitHandler(req);
     const { username, password, role } = await req.json();
 
     if (!username || !password || !role) {

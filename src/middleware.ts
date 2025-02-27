@@ -21,8 +21,6 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-// Well, some people really like to just mess around, 
-// so I limited the register api
 export const config = {
-  matcher: ["/api/auth/register", "/api/user", "/api/task", "/api/task/:path*", "/api/user/:path*"],
+  matcher: ["/api/user", "/api/task", "/api/team", "/api/task/:path*", "/api/user/:path*", "/api/team/:path*"],
 };

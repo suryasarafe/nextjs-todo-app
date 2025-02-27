@@ -1,10 +1,12 @@
 import { getUserFromCookie } from "@/lib/auth";
+import limitHandler from "@/lib/limiter";
 import prisma from "@/lib/prisma";
 import { checkAuthorized, errorResponseHandler } from "@/lib/util";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user);
 

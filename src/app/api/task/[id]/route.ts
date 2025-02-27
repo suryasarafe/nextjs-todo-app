@@ -1,4 +1,5 @@
 import { getUserFromCookie } from "@/lib/auth";
+import limitHandler from "@/lib/limiter";
 import prisma from "@/lib/prisma";
 import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/lib/util";
 import { Task } from "@prisma/client";
@@ -6,6 +7,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user)
     const { id } = await params;
@@ -28,6 +30,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user)
     const { id } = await params;

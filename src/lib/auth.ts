@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
-export function getUserFromRequest(req: Request) {
+export async function getUserFromRequest(req: Request) {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
 

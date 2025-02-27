@@ -27,6 +27,8 @@ export function errorResponseHandler(error: any) {
       case "Unauthorized":
       case "User not lead":
         return NextResponse.json({ error: error.message }, { status: 401 });
+      case "Too many requests":
+        return NextResponse.json({ error: error.message }, { status: 429 });
 
       default:
         return NextResponse.json({ error }, { status: 500 });

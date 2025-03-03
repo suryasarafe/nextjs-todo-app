@@ -32,7 +32,7 @@ export default function TaskContainer() {
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setTasks(data.tasks || []));
+      .then((data) => setTasks(data.data || []));
   }, []);
 
   return (

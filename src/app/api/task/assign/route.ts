@@ -1,18 +1,17 @@
-import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserFromCookie } from "@/lib/auth";
-import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/lib/util";
+import { checkAuthorized, checkAuthorizedLead, createResponse, errorMassage, errorResponseHandler } from "@/lib/util";
 import limitHandler from "@/lib/limiter";
 
 export async function POST(req: Request) {
   try {
     await limitHandler(req);
     const user = await getUserFromCookie();
-    checkAuthorized(user)
+    checkAuthorized(user);
 
     const { taskId, assignToId } = await req.json();
     if (!taskId || !assignToId) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      throw new Error(errorMassage.missingField);
     }
 
     if (assignToId != user!.id) {
@@ -24,11 +23,8 @@ export async function POST(req: Request) {
       data: { assignedToId: assignToId },
     });
 
-    return NextResponse.json({ message: "Task assigned", task }, { status: 200 });
+    return createResponse(200, task, "Task Assigned");
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }

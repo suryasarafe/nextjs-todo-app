@@ -24,8 +24,8 @@ export default function LoginContainer() {
       return;
     }
     const data = await res.json();
-    document.cookie = `token=${data.token}; path=/; Secure`;
-    document.cookie = `role=${data.role}; path=/; Secure`;
+    document.cookie = `token=${data.data.token}; path=/; Secure`;
+    document.cookie = `role=${data.data.role}; path=/; Secure`;
     router.push("/home");
   };
 

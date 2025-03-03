@@ -30,13 +30,13 @@ export default async function EditTaskPage({ params }: { params: Promise<{ taskI
   return <section>
     <div className="flex flex-col md:flex-row gap-4">
       <div className="flex-1 p-4">
-        <EditTaskContainer givenTask={data.tasks} />
+        <EditTaskContainer givenTask={data.data} />
       </div>
 
       {
         role == 'LEAD' ?
           <div className="flex-1 p-4">
-            <AssignTaskContainer givenTask={data.tasks} />
+            <AssignTaskContainer givenTask={data.data} />
           </div> : null
       }
     </div>

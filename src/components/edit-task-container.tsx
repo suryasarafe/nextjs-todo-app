@@ -31,7 +31,7 @@ export default function EditTaskContainer({ givenTask }: { givenTask: Task | nul
       })
         .then((res) => res.json())
         .then((data) => {
-          setTask(data.tasks || {});
+          setTask(data.data || {});
           setLoading(false);
         })
 

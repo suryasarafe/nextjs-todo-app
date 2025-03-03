@@ -66,7 +66,7 @@ export function errorResponseHandler(error: any) {
 }
 
 export function createResponse<T>(status: number, data: T, message?: string) {
-  const response = { status: true, data, message };
+  const response: BaseResponse<typeof data> = { status: true, data, message };
   return NextResponse.json(response, { status });
 }
 

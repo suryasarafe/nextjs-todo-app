@@ -1,38 +1,37 @@
 import { getUserFromCookie } from "@/lib/auth";
+import limitHandler from "@/lib/limiter";
 import prisma from "@/lib/prisma";
-import { checkAuthorized, checkAuthorizedLead, errorResponseHandler } from "@/lib/util";
+import { checkAuthorized, checkAuthorizedLead, createResponse, errorMassage, errorResponseHandler } from "@/lib/util";
 import { Task } from "@prisma/client";
-import { NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user)
     const { id } = await params;
     if (!id) {
-      return NextResponse.json({ error: "id required" }, { status: 400 });
+      throw new Error(errorMassage.missingField);
     }
 
     const tasks = await prisma.task.findFirst({ where: { id } });
     if (!tasks) {
-      return NextResponse.json({ error: "No Task" }, { status: 400 });
+      throw new Error(errorMassage.notFound);
     }
-    return NextResponse.json({ tasks }, { status: 200 });
+    return createResponse(200, tasks);
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await limitHandler(req);
     const user = await getUserFromCookie();
     checkAuthorized(user)
     const { id } = await params;
     if (!id) {
-      return NextResponse.json({ error: "id required" }, { status: 400 });
+      throw new Error(errorMassage.missingField);
     }
 
     const { status, notes, title, description } = await req.json();
@@ -43,7 +42,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     const task = await prisma.task.findUnique({ where: { id } });
     if (!task) {
-      return NextResponse.json({ error: "Task not found" }, { status: 403 });
+      throw new Error(errorMassage.notFound);
     }
 
     const data: Partial<Task> = { status, notes }
@@ -54,12 +53,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { id },
       data: data,
     });
-
-    return NextResponse.json({ message: "Task status updated", task: updatedTask }, { status: 200 });
+    return createResponse(200, updatedTask, "Task Updated")
   } catch (error) {
-    if (error instanceof Error) {
-      return errorResponseHandler(error);
-    }
-    return NextResponse.json({ error }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }

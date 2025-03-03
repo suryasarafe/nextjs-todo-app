@@ -1,13 +1,13 @@
 import { getUserFromRequest } from "@/lib/auth";
-import { checkAuthorized, errorResponseHandler } from "@/lib/util";
-import { NextResponse } from "next/server";
+import limitHandler from "@/lib/limiter";
+import { checkAuthorized, createResponse, errorResponseHandler } from "@/lib/util";
 
 export async function GET(req: Request) {
   try {
+    await limitHandler(req);
     const user = await getUserFromRequest(req);
     checkAuthorized(user);
-
-    return NextResponse.json({ status: true }, { status: 200 });
+    return createResponse(200, {});
   } catch (error) {
     return errorResponseHandler(error);
   }

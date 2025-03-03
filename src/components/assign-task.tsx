@@ -18,7 +18,7 @@ export default function AssignTaskContainer({ givenTask }: { givenTask: Tasks | 
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
       })
         .then((res) => res.json())
-        .then((data) => setTasks(data.tasks || []));
+        .then((data) => setTasks(data.data || []));
     } else {
       setTasks([givenTask]);
     }
@@ -27,7 +27,7 @@ export default function AssignTaskContainer({ givenTask }: { givenTask: Tasks | 
       headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then((data) => setUsers(data.users || []));
+      .then((data) => setUsers(data.data || []));
   }, [givenTask]);
 
   const handleAssign = async () => {

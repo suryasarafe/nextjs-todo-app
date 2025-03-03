@@ -1,35 +1,39 @@
-import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import limitHandler from "@/lib/limiter";
+import { createResponse, errorMassage, errorResponseHandler } from "@/lib/util";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 export async function POST(req: Request) {
   try {
+    await limitHandler(req);
     const { username, password } = await req.json();
 
     if (!username || !password) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      throw new Error(errorMassage.missingField);
     }
 
-    const user = await prisma.user.findUnique({ where: { username } });
+    const user = await prisma.user.findUnique({
+      select: { username: true, id: true, role: true, password: true },
+      where: { username, }
+    });
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      throw new Error(errorMassage.unauthorized);
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      throw new Error(errorMassage.unauthorized);
     }
 
     const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, SECRET_KEY, {
       expiresIn: "1h",
     });
 
-    user.password = '*****';
-    return NextResponse.json({ ...user, token }, { status: 200 });
+    return createResponse(200, { id: user.id, username: user.username, role: user.role, token });
   } catch (error) {
-    return NextResponse.json({ error, message: "Server error" }, { status: 500 });
+    return errorResponseHandler(error);
   }
 }
